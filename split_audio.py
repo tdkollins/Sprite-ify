@@ -43,7 +43,7 @@ def serialize_audio(segments):
             "emotion": emotion
         })
         total += segment.duration_seconds
-    print(serialized_data)
+    return serialized_data
 
 
 if __name__ == "__main__":
