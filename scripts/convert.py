@@ -9,6 +9,7 @@ def make_video(audio_obj):
     length = audio_obj["total_length"]
     clips = audio_obj["segments"]
     sprites = []
+    curr_sprite = None
     for i, clip in enumerate(clips):
         if clip["score"] > 0.4 and clip["score"] <= 1.0:
             sprite_type = "happy"
@@ -18,6 +19,10 @@ def make_video(audio_obj):
             sprite_type = "angry"
 
         random_file = random.choice(os.listdir(f"../sprites/Kurisu/{sprite_type}/"))
+        while random_file == curr_sprite:
+            random_file = random.choice(os.listdir(f"../sprites/Kurisu/{sprite_type}/"))
+        curr_sprite = random_file
+
         sprite = f"../sprites/Kurisu/{sprite_type}/{random_file}"
 
         if clip != clips[-1]:
@@ -30,8 +35,7 @@ def make_video(audio_obj):
     output = video.render()
     audio = AudioFileClip("../audio_input/potion.wav")
     clip = VideoFileClip(output).set_audio(audio)
-    dest = "../dest/" + output
-    clip.write_videofile(dest, codec="libx264", audio_codec="aac")
+    clip.write_videofile("file.mp4", codec="libx264", audio_codec="aac")
 
 
 # https://stackoverflow.com/questions/44720580/resize-image-canvas-to-maintain-square-aspect-ratio-in-python-opencv
@@ -104,8 +108,6 @@ class Video:
             for num in range(0, int(s.duration * 10)):
                 image = cv2.resize(image, img_size)
                 video.write(np.array(image))
-            # cv2.imshow("plz", image)
-            # cv2.waitKey()
         video.release()
         return output_path
 
