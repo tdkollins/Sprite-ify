@@ -55,21 +55,28 @@ def split_audio(file_location: str):
             wavfile.write(f".//temp//segment{idx}.wav", rate, data[end:])
         start = end
 
-    serialize_audio(len(timestamps), timestamps, sentiments)
+    sound_file = AudioSegment.from_wav(file_location)
+    total_length = sound_file.duration_seconds
+
+    serialize_audio(len(timestamps), timestamps, sentiments, total_length)
 
 
-def serialize_audio(num_files, timestamps, sentiments):
+def serialize_audio(num_files, timestamps, sentiments, total_length):
     timestamps = [0] + timestamps[:-1:]
-    serialized_data = []
+    segments = []
     for idx in range(num_files):
         print(f".//temp//segment{idx}.wav")
         # live_prediction = LivePredictions(file=f".//temp//segment{idx}.wav")
         # live_prediction.loaded_model.summary()
         # emotion = live_prediction.make_predictions()
-        serialized_data.append({
+        segments.append({
             "start_time": timestamps[idx],
             "score": sentiments[idx]
         })
+    serialized_data = {
+        "total_length": total_length,
+        "segments": segments
+    }
     print(serialized_data)
     return serialized_data
 
