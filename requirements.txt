@@ -35,6 +35,7 @@ glob2==0.7
 google-api-core==1.26.0
 google-auth==1.27.0
 google-cloud-core==1.6.0
+google-cloud-language==2.0.0
 google-cloud-speech==2.0.1
 google-cloud-storage==1.36.0
 google-crc32c==1.1.2
